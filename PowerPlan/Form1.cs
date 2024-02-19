@@ -17,10 +17,19 @@ namespace PowerPlan
 
         private void FormLoad(object? sender, EventArgs e)
         {
-            Debug.WriteLine("This is a message in the Output window.");
+            FireAndForgetAsync();
+        }
 
-            string currentPlan = _powerManagementService.GetCurrentPlan();
-            Debug.WriteLine("Current plan:" + currentPlan);
+        private async void FireAndForgetAsync()
+        {
+            try
+            {
+                await _powerManagementService.MonitorAndAjustPowerPlansAsync();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void FormResize(object? sender, EventArgs e)
